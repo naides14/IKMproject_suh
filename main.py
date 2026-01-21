@@ -4,6 +4,7 @@ c=0
 f=1
 sel=0
 while sel!=4:
+    f=1
     print('Программа "Персональный бюджет"')
 
     base = []
@@ -16,12 +17,15 @@ while sel!=4:
         if len(base)==0:
             print('Ошибка: файл пуст')
             f=0
+            break
         else:
             base.pop(0)
             print(f'Загружено {len(base)} записей')
-    except (FileNotFoundError,IOError) as e:
+    except (FileNotFoundError,IOError):
         print('Ошибка: файл не найден')
         f=0
+        break
+
     if f!=0:
         sel=gui.menu()
         if sel==None:
@@ -86,7 +90,7 @@ while sel!=4:
     if f!=0 and sel==3:
             base3=[i for i in base if i[2]=='EXPENSE']
             base3times = []
-            valtimes=logic.times(base3,0000,1900)
+            valtimes=logic.times(base3,0000,2370)
             if valtimes!=None:
                 for i in range(len(base3)):
                     if (base3[i][1] in valtimes):

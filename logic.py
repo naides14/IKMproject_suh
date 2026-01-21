@@ -27,16 +27,6 @@ def pyr(a):
         m=m-1
         heap(a,0,m)
 
-def days(specbase):
-    temp = []
-    daylist=[]
-    for i in range(len(specbase)):
-        temp.append(int(specbase[i][0]))
-
-    for i in temp:
-        daylist.append[i[6:8]]
-    print(daylist)
-
 def datesort(specbase): #взятие дат из основного списка, сортировка и возвращение списка отсортированных дат в исходном формате
     x=[]
     xnew=[]
@@ -104,7 +94,7 @@ def cagentsort(x):
     return x
 
 def times(specbase,b,e): # получение времени из основного списка, его сортировка и преобразование в исходный формат
-    if b>e or b<0 or e<0 or e>2359 or len(str(b))>4 or len(str(e))>4:
+    if b>e or b<0 or e<0 or e>2359 or len(str(b))>4 or len(str(e))>4 or int(str(b[2]))>5 or int(str(e[2]))>5:
         print('Ошибка: неправильное время')
         return
     else:
