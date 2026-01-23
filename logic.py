@@ -1,31 +1,4 @@
-
-def heap(a,i,m):
-    l=i*2+1
-    r=l+1
-    if l>=m:
-        return
-    k=l
-    if r<m and a[r]>a[l]:
-        k=r
-    if a[i]<a[k]:
-        j=a[i]
-        a[i]=a[k]
-        a[k]=j
-        heap(a,k,m)
-
-def uporheap(a,m):                                           #сортировка кучей
-    for g in range(m//2,-1,-1):
-        heap(a,g,m)
-
-def pyr(a):
-    m=len(a)
-    uporheap(a,m)
-    while m>1:
-        temp=a[0]
-        a[0]=a[m-1]
-        a[m-1]=temp
-        m=m-1
-        heap(a,0,m)
+import heap
 
 def datesort(specbase): #взятие дат из основного списка, сортировка и возвращение списка отсортированных дат в исходном формате
     x=[]
@@ -39,7 +12,7 @@ def datesort(specbase): #взятие дат из основного списк�
         i = i[4:8] + i[2:4] + i[0:2]
         i=int(i)
         xnew.append(i)
-    pyr(xnew)
+    heap.pyr(xnew)
     for i in xnew:
         i=str(i)
         i=i[6:8]+'.'+i[4:6]+'.'+i[0:4]
@@ -54,6 +27,17 @@ def datesort2(stimes,specbase,finsort): #сопоставление дат из 
                 specbase.pop(j)
                 break
     return finsort
+
+def daynumber(date): #возвращение номера дня по дате
+    d=int(date[0:2])
+    m=int(date[3:5])
+    y=int(date[6:10])
+    a=(14-m)//12
+    b=y+4800-a
+    c=m+12*a-3
+    daynum=d+(((153*c+2)//5)+365*b+(b//4)-(b//100)+(b//400)-32045)
+    return daynum
+
 def sumsort(x):
     for i in range(len(x)-1): #СОРТИРОВКА ПО СУММЕ ЕСЛИ ДАТЫ В ЗАПИСЯХ РАВНЫ (отчет 1)
         if x[i][0]==x[i+1][0] and int(x[i][4])<int(x[i+1][4]):
@@ -71,7 +55,7 @@ def sumsort2(specbase): #получение сумм из основного с�
     sums=[]
     for i in range(len(specbase)):
         sums.append(int(specbase[i][4]))
-    pyr(sums)
+    heap.pyr(sums)
     sums=sums[::-1]
     for i in range(len(sums)):
         for j in range(len(specbase)):
@@ -94,8 +78,8 @@ def cagentsort(x):
     return x
 
 def times(specbase,b,e): # получение времени из основного списка, его сортировка и преобразование в исходный формат
-    if b>e or b<0 or e<0 or e>2359 or len(str(b))>4 or len(str(e))>4 or int(str(b[2]))>5 or int(str(e[2]))>5:
-        print('Ошибка: неправильное время')
+    if int(b)>int(e) or int(b)<0 or int(e)<0 or int(e)>2359 or len(b)>4 or len(e)>4 or int(b[2])>5 or int(e[2])>5:
+        print('|ОШИБКА|: неправильное время')
         return
     else:
         x = []
@@ -106,13 +90,13 @@ def times(specbase,b,e): # получение времени из основно
             i = i.replace(':', '')
             i = int(i)
             times.append(i)
-        pyr(times)
-        rtimes = []
-        xdone = []
+        heap.pyr(times)
+        validtimes = []
+        tsorted = []
         for i in times:
             if i>=int(b) and i<=int(e):
-                rtimes.append(i)
-        for i in rtimes:
+                validtimes.append(i)
+        for i in validtimes:
             i = str(i)
             if 9>=int(i)>=0:
                 i='000'+i
@@ -121,8 +105,8 @@ def times(specbase,b,e): # получение времени из основно
             if 59>=int(i)>=0:
                 i='00'+i
             i = i[0:2] + ':' + i[2:4]
-            xdone.append(i)
-    return xdone
+            tsorted.append(i)
+    return tsorted
 
 
 

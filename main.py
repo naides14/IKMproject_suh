@@ -1,11 +1,10 @@
 import logic
 import gui
 c=0
-f=1
 sel=0
 while sel!=4:
     f=1
-    print('Программа "Персональный бюджет"')
+    print('\n''Программа "Персональный бюджет"')
 
     base = []
     try:
@@ -15,30 +14,30 @@ while sel!=4:
                 row = row.split(',')
                 base.append(row)
         if len(base)==0:
-            print('Ошибка: файл пуст')
+            print('|ОШИБКА|: файл пуст')
             f=0
             break
         else:
             base.pop(0)
             print(f'Загружено {len(base)} записей')
     except (FileNotFoundError,IOError):
-        print('Ошибка: файл не найден')
+        print('|ОШИБКА|: файл не найден')
         f=0
         break
 
     if f!=0:
         sel=gui.menu()
         if sel==None:
-            print('Ошибка: неправильный выбор отчета')
+            print('|ОШИБКА|: неправильный выбор отчета')
             f=0
         if f!=0 and sel==1:
             try:
                 n = int(input('\n''Пожалуйста, введите число дней для сортировки поступлений: '))
             except ValueError:
-                print('Ошибка: Введите число!')
+                print('|ОШИБКА|: Введите число!')
                 f=0
             if f!=0 and int(n)<=0:
-                print('Ошибка: Введите натуральное число!')
+                print('|ОШИБКА|: Введите натуральное число!')
                 f=0
 
     if f!=0 and sel==1:
@@ -50,25 +49,25 @@ while sel!=4:
         logic.datesort2(sortedtimes,base1,finalsorted)
         logic.sumsort(finalsorted)
 
-
-
         print('\n',f'1) Список всех поступлений, отсортированный по дате и сумме по убыванию, за прошедшие {n} дней ')
-        final2=[]
+        final1 = []
+
+        lastday=logic.daynumber(finalsorted[0][0])
         for i in range(len(finalsorted)):
-            final2.append(finalsorted[i])
-            c+=1
-            if c+1>n:
+            if (lastday-logic.daynumber(finalsorted[i][0]))<=n:
+                final1.append(finalsorted[i])
+            else:
                 break
 
-        gui.outputmenu(final2)
+        gui.outputmenu(final1)
 
 
     if f!=0 and sel==2:
             catglist={i[3] for i in base} #список с существующими категориями
 
-            catg=input('\n''Пожалуйста, укажите категорию для сортировки поступлений (из TRANSPORTATION, ADVANCE, FOOD, SALARY, GIFT, ENTERTAINMENT): ')
+            catg=input('\n''Пожалуйста, укажите категорию для сортировки затрат (из TRANSPORTATION, ADVANCE, FOOD, SALARY, GIFT, ENTERTAINMENT): ')
             if catg not in catglist:
-                print(('Ошибка: категории не существует, либо введено число'))
+                print('|ОШИБКА|: категории не существует, либо введено число')
                 f = 0
             else:
                 base2 = [i for i in base if i[3] == catg and i[2]=='EXPENSE']
@@ -90,7 +89,7 @@ while sel!=4:
     if f!=0 and sel==3:
             base3=[i for i in base if i[2]=='EXPENSE']
             base3times = []
-            valtimes=logic.times(base3,0000,2370)
+            valtimes=logic.times(base3,'0000','2300')
             if valtimes!=None:
                 for i in range(len(base3)):
                     if (base3[i][1] in valtimes):
